@@ -18,7 +18,7 @@ class ContactFactory extends Factory
      */
     public function definition(): array
     {
-        fake()->locale = 'es_MX';
+        fake()->locale = 'es_ES';
 
         return [
             'name' => ucfirst(fake()->unique()->words(3, true)),

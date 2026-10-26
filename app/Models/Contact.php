@@ -22,7 +22,16 @@ class Contact extends Model
         'avatar',
     ];
 
-    public function creator(): BelongsTo
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
