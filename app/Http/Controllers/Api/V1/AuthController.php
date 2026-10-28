@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Mcp\Request;
+use Laravel\Mcp\Response;
 
 class AuthController extends Controller
 {
@@ -34,5 +36,17 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => new UserResource($user),
         ]);
+    }
+
+    public function me(Request $request): UserResource
+    {
+        return new UserResource($request->user());
+    }
+
+    public function logout(Request $request): Response
+    {
+        $request->user()->currentAccesToken()->delete();
+
+        return response()->noContent();
     }
 }
