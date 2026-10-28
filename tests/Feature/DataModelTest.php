@@ -24,3 +24,16 @@ it('no se aceptan contactos con el mismo correo electrónico', function () {
         'email' => 'correoduplicado@error.com',
     ]))->toThrow(UniqueConstraintViolationException::class);
 });
+
+it('no se aceptan contactos con el mismo numero de telefono', function () {
+    $user = User::factory()->create();
+    Contact::factory()->create([
+        'user_id' => $user->id,
+        'number_phone' => '3000000000',
+    ]);
+
+    expect(fn () => Contact::factory()->create([
+        'user_id' => $user->id,
+        'number_phone' => '3000000000',
+    ]))->toThrow(UniqueConstraintViolationException::class);
+});
