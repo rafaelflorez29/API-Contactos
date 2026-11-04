@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Laravel\Sanctum\Sanctum;
 
 function loginData(array $cambios = []): array
@@ -15,8 +17,9 @@ function loginData(array $cambios = []): array
 beforeEach(function () {
     $this->user = User::factory()->create([
         'email' => 'ana@taskflow.test',
-        'password' => 'secreta123',
+        'password' => Hash::make('secreta123'),
     ]);
+    
 });
 
 it('entrega un token con credenciales correctas', function () {
