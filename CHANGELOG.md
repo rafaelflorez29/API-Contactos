@@ -7,3 +7,10 @@
 
 ### Changed
 - El endpoint de salud pasa a un controlador invocable
+
+## [Unreleased]
+
+## [0.3.0] - 2026-11-04
+### Added
+- Login con token de Sanctum (POST /api/v1/auth/login)
+- …(lo que estaba en Unreleased)
