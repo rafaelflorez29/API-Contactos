@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('avatar', 255);
 
             $table->unique(['email', 'user_id']);
+            $table->unique(['user_id', 'number_phone']);
             $table->timestamps();
             $table->softDeletes();
         });
