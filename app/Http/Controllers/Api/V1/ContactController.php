@@ -1,49 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreContactRequest;
+use App\Http\Requests\Auth\UpdateContactRequest;
 use App\Models\Contact;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class ContactController extends Controller
 {
-    /**
-     * Almacena un nuevo contacto en la base de datos y redirige.
-     */
-    public function store(StoreContactRequest $request): RedirectResponse
+    public function store(StoreContactRequest $request): JsonResponse
     {
-        // Creamos el contacto con los datos ya validados por el Form Request
-        Contact::create($request->validated());
+        $contact = Contact::create([
+            ...$request->validated(),
+            'user_id' => $request->user()->id,
+        ]);
 
-        // Redirigimos de vuelta con un mensaje flash de éxito
-        return redirect()->route('contacts.index')
-                         ->with('success', 'Contacto creado exitosamente.');
+        return response()->json([
+            'message' => 'Contacto creado exitosamente.',
+            'data' => $contact,
+        ], 201);
     }
 
-    /**
-     * Actualiza un contacto existente en la base de datos y redirige.
-     */
-    public function update(StoreContactRequest $request, Contact $contact): RedirectResponse
+    public function update(UpdateContactRequest $request, Contact $contact): JsonResponse
     {
-        // Actualizamos el contacto con los datos ya validados por el Form Request
         $contact->update($request->validated());
 
-        // Redirigimos de vuelta con un mensaje flash de éxito
-        return redirect()->route('contacts.index')
-                         ->with('success', 'Contacto actualizado exitosamente.');
+        return response()->json([
+            'message' => 'Contacto actualizado exitosamente.',
+            'data' => $contact,
+        ], 200);
     }
 
-    /**
-     * Elimina un contacto de la base de datos y redirige.
-     */
-    public function destroy(Contact $contact): RedirectResponse
+    public function destroy(Contact $contact): JsonResponse
     {
-        // Eliminamos el contacto
         $contact->delete();
 
-        // Redirigimos de vuelta con un mensaje flash de éxito
-        return redirect()->route('contacts.index')
-                         ->with('success', 'Contacto eliminado exitosamente.');
+        return response()->json([
+            'message' => 'Contacto eliminado exitosamente.',
+        ], 200);
     }
 }
