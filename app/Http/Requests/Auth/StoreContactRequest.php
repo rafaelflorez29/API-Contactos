@@ -24,11 +24,12 @@ class StoreContactRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required','email', 'max:200', 'unique:contacts,email'],
+            'email' => ['required', 'email', 'max:200', 'unique:contacts,email'],
             'number_phone' => ['required', 'string', 'max:50'],
             'avatar' => ['required', 'string', 'max:200'],
         ];
     }
+
     public function messages(): array
     {
         return [
