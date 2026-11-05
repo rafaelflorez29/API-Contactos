@@ -21,8 +21,8 @@ class ContactFactory extends Factory
         fake()->locale = 'es_ES';
 
         return [
-            'name' => ucfirst(fake()->unique()->words(3, true)),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => ucfirst(fake()->words(3, true)),
+            'email' => fake()->safeEmail(),
             'number_phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'avatar' => fake()->imageUrl(500, 500, 'people', true),

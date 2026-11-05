@@ -2,7 +2,6 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Laravel\Sanctum\Sanctum;
 
 function loginData(array $cambios = []): array
@@ -19,7 +18,7 @@ beforeEach(function () {
         'email' => 'ana@taskflow.test',
         'password' => Hash::make('secreta123'),
     ]);
-    
+
 });
 
 it('entrega un token con credenciales correctas', function () {

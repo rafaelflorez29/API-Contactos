@@ -38,29 +38,56 @@ it('no se aceptan contactos con el mismo numero de telefono', function () {
     ]))->toThrow(UniqueConstraintViolationException::class);
 });
 
-it('un usuario puede actualizar un contacto', function () {
+it('un usuario puede editar un contacto', function () {
     $user = User::factory()->create();
-    
-    // Creamos un contacto inicial
+
     $contact = Contact::factory()->create([
-        'name' => 'Nombre Antiguo',
-        'email' => 'ana@example.com',
+        'name' => 'rafa',
+        'email' => 'rafa@gmail.com',
+        'number_phone' => '3000000000',
+        'avatar' => 'imagen.png',
+        'address' => 'calle 27',
     ]);
 
-    $payload = [
-        'name' => 'Nombre Actualizado',
-        'email' => 'ana@example.com', // Mantiene su propio email sin dar error de duplicado
-        'phone' => '999888777',
+    $actualizar = [
+        'name' => 'Rafael',
+        'email' => 'rafa@gmail.com',
+        'number_phone' => '3000000001',
+        'avatar' => 'perfil.png',
+        'address' => 'Calle 14',
     ];
 
-    $this->actingAs($user)
-         ->putJson("/api/contacts/{$contact->id}", $payload)
-         ->assertStatus(200)
-         ->assertJsonPath('data.name', 'Nombre Actualizado');
+    $resultado = $this->actingAs($user)
+        ->putJson("api/v1/contact/{$contact->id}", $actualizar);
 
-    // Verificamos que cambió en la base de datos
+    $resultado->assertStatus(200)
+        ->assertJson([
+            'message' => 'Contacto actualizado exitosamente.',
+        ]);
+
     $this->assertDatabaseHas('contacts', [
         'id' => $contact->id,
-        'name' => 'Nombre Actualizado'
+        'name' => 'Rafael',
+        'number_phone' => '3000000001',
     ]);
 });
+
+it('un usuario puede eliminar contactos', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'name' => 'Rafael',
+        'email' => 'rafa@gmail.com',
+        'number_phone' => '3000000001',
+        'avatar' => 'perfil.png',
+        'address' => 'Calle 14',
+    ]);
+
+    $resultado = $this->actingAs($user)->deleteJson("api/v1/contact/{$contact->id}");
+
+    $resultado->assertStatus(200)->assertJson([
+        'message' => 'Contacto eliminado exitosamente.',
+    ]);
+});
+
+it('mostrar usuarios', function () {});
