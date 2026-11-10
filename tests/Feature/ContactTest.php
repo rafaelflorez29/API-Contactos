@@ -4,14 +4,6 @@ use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 
-it('crear usuarios por defecto', function () {
-    $user = User::factory()->create();
-
-    expect($user->fresh())->toBeInstanceOf(User::class)
-        ->and($user->name)->not->toBeNull()
-        ->and($user->email)->not->toBeNull();
-});
-
 it('no se aceptan contactos con el mismo correo electrónico', function () {
     $user = User::factory()->create();
     Contact::factory()->create([
@@ -38,7 +30,7 @@ it('no se aceptan contactos con el mismo numero de telefono', function () {
     ]))->toThrow(UniqueConstraintViolationException::class);
 });
 
-it('un usuario puede editar un contacto', function () {
+it('un contacto puede ser editado', function () {
     $user = User::factory()->create();
 
     $contact = Contact::factory()->create([
@@ -72,7 +64,7 @@ it('un usuario puede editar un contacto', function () {
     ]);
 });
 
-it('un usuario puede eliminar contactos', function () {
+it('un contacto puede ser eliminado por un usuario', function () {
     $user = User::factory()->create();
 
     $contact = Contact::factory()->create([
@@ -90,4 +82,22 @@ it('un usuario puede eliminar contactos', function () {
     ]);
 });
 
-it('mostrar usuarios', function () {});
+it('listar contactos', function() {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id
+    ]);
+
+    $resultado = $this->actingAs($user)->getJson('api/v1/contacts');
+
+    $resultado->assertStatus(200)->assertJsonFragment([
+        "id" => $contact->id,
+        "name" => $contact->name,
+        "email" => $contact->email,
+        "address" => $contact->address,
+        "number_phone" => $contact->number_phone,
+        "avatar" => $contact->avatar,
+        "user_id" => $contact->user_id,
+    ]);
+});

@@ -41,4 +41,11 @@ class ContactController extends Controller
             'message' => 'Contacto eliminado exitosamente.',
         ], 200);
     }
+    public function index(){
+        $contacts = auth()->user()->contacts()->get();
+
+        return response()->json([
+            "contact" => $contacts,
+        ], 200);
+    }
 }
