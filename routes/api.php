@@ -17,6 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/contact/{contact}', [ContactController::class, 'destroy']);
         Route::get('/users', [UserController::class, 'index'])->name('user');
         Route::get("/contacts", [ContactController::class, 'index']);
+        Route::get('/contacts/{conatct_id}', [ContactController::class, 'show']);
         Route::post("/created-user", [UserController::class, 'store']);
     });
 });

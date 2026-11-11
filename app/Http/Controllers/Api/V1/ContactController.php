@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\StoreContactRequest;
 use App\Http\Requests\Auth\UpdateContactRequest;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
@@ -41,11 +42,17 @@ class ContactController extends Controller
             'message' => 'Contacto eliminado exitosamente.',
         ], 200);
     }
-    public function index(){
-        $contacts = auth()->user()->contacts()->get();
+    public function index(Request $request){
+        $contacts = $request()->user()->contacts()->get();
 
         return response()->json([
             "contact" => $contacts,
         ], 200);
+    }
+
+    public function show(Request $request, $id){
+        $contact = $request->user()->contacts()->findOrFail($id);
+
+        return response()->json($contact);
     }
 }
