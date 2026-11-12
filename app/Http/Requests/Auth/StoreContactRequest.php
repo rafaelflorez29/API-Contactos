@@ -24,9 +24,10 @@ class StoreContactRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'email', 'max:200', 'unique:contacts,email'],
+            'email' => ['email', 'max:200', 'unique:contacts,email'],
             'number_phone' => ['required', 'string', 'max:50'],
-            'avatar' => ['required', 'string', 'max:200'],
+            'avatar' => ['string', 'max:200'],
+            'address' => ['string', 'max:200'],
         ];
     }
 
@@ -38,7 +39,6 @@ class StoreContactRequest extends FormRequest
             'email.email' => 'Debe ingresar un correo electrónico válido.',
             'email.unique' => 'Este correo electrónico ya está registrado en tus contactos.',
             'number_phone.required' => 'El número de teléfono es obligatorio.',
-            'avatar.required' => 'La imagen del contacto es obligatoria.',
         ];
     }
 }
