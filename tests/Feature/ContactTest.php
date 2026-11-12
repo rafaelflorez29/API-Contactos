@@ -102,3 +102,31 @@ it('listar contactos', function() {
         "user_id" => $contact->user_id,
     ]);
 });
+
+test('crea un contacto válido', function () {
+    $user = User::factory()->create();
+    
+    $contact = [
+        'user_id' => 1,
+        'name' => "Rafa",
+        'email' => "raafa@gmail.com",
+        'number_phone' => "1234567890",
+        'address' => 'Calle 12 #01-10',
+        'avatar' => 'default.png',
+    ];
+
+    $resultado = $this->actingAs($user)->postJson('api/v1/contact', $contact);
+
+    $resultado->assertCreated();
+    
+});
+
+it('devuelve 404 para un contacto ajeno', function(){
+    $user = User::factory()->create();
+    $visitante = User::factory()->create();
+    $contact = Contact::factory()->for($user)->create([
+        'name' => "Contacto privado"
+    ]);
+
+    $resultado = $this->actingAs($visitante)->getJson('api/v1/contact/'.$contact->id)->assertNotFound()->assertJsonMissing(['name' => "Contacto privado"]);
+});
