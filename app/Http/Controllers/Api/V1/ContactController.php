@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreContactRequest;
 use App\Http\Requests\Auth\UpdateContactRequest;
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
@@ -34,23 +36,24 @@ class ContactController extends Controller
         ], 200);
     }
 
-    public function destroy(Contact $contact): JsonResponse
+    public function destroy(Contact $contact): Response
     {
         $contact->delete();
 
-        return response()->json([
-            'message' => 'Contacto eliminado exitosamente.',
-        ], 200);
+        return response()->noContent();
     }
-    public function index(){
+
+    public function index()
+    {
         $contacts = auth()->user()->contacts()->get();
 
         return response()->json([
-            "contact" => $contacts,
+            'contact' => ContactResource::collection($contacts),
         ], 200);
     }
 
-    public function show(Request $request, $id){
+    public function show(Request $request, $id)
+    {
         $contact = $request->user()->contacts()->findOrFail($id);
 
         return response()->json($contact);

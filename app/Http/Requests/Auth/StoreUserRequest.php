@@ -25,7 +25,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:200', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:6', 'max:50']
+            'password' => ['required', 'string', 'min:8', 'max:50'],
         ];
     }
 
@@ -36,7 +36,7 @@ class StoreUserRequest extends FormRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'Debe ingresar un correo electrónico válido.',
             'email.unique' => 'Este correo electrónico ya está registrado en tus contactos.',
-            'password.required' => 'La contraseña es obligatoria'
+            'password.required' => 'La contraseña es obligatoria',
         ];
     }
 }

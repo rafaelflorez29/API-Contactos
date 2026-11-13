@@ -1,11 +1,13 @@
 <?php
 
-use App\Models\User;
 use App\Models\Contact;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 it('crear usuarios por defecto', function () {
     $user = User::factory()->create();
 
+    Sanctum::actingAs($user);
     expect($user->fresh())->toBeInstanceOf(User::class)
         ->and($user->name)->not->toBeNull()
         ->and($user->email)->not->toBeNull();
@@ -30,6 +32,7 @@ it('un usuario puede editar un contacto', function () {
         'address' => 'Calle 14',
     ];
 
+    Sanctum::actingAs($user);
     $resultado = $this->actingAs($user)
         ->putJson("api/v1/contact/{$contact->id}", $actualizar);
 
@@ -56,26 +59,26 @@ it('un usuario puede eliminar contactos', function () {
         'address' => 'Calle 14',
     ]);
 
+    Sanctum::actingAs($user);
     $resultado = $this->actingAs($user)->deleteJson("api/v1/contact/{$contact->id}");
 
-    $resultado->assertStatus(200)->assertJson([
-        'message' => 'Contacto eliminado exitosamente.',
-    ]);
+    $resultado->assertStatus(204);
 });
 
 it('mostrar usuarios', function () {
     $user = User::factory()->create();
 
+    Sanctum::actingAs($user);
     $resultado = $this->actingAs($user)->getJson('api/v1/users');
 
     $resultado->assertStatus(200)->assertJsonStructure([
-        "user" => [
-            "*" => [
-                "id",
-                "name",
-                "email",
-            ]
-        ]
+        'user' => [
+            '*' => [
+                'id',
+                'name',
+                'email',
+            ],
+        ],
     ]);
 });
 
@@ -85,12 +88,28 @@ it('crear usuario', function () {
     $datos = [
         'name' => 'Rafael Andrés Flórez González',
         'email' => 'rafael@gmail.com',
-        'password' => 'rafael123',
+        'password' => 'rafael12',
     ];
 
+    Sanctum::actingAs($user);
     $resultado = $this->actingAs($user)->postJson('/api/v1/created-user', $datos);
 
     $resultado->assertStatus(201)->assertJson([
-            'message' => 'Usuario creado con exito'
-        ]);
+        'message' => 'Usuario creado con exito',
+    ]);
+});
+
+it('rechaza usuarios con contraseñas de menos de ocho caracteres', function () {
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+
+    $this->actingAs($user)->postJson('/api/v1/created-user', [
+        'name' => 'Usuario de prueba',
+        'email' => 'prueba@example.test',
+        'password' => '1234567',
+    ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['password']);
+
+    $this->assertDatabaseMissing('users', ['email' => 'prueba@example.test']);
 });
