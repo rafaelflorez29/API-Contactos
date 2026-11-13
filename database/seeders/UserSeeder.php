@@ -13,8 +13,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $admin = User::factory()->create([
-            'name' => 'Administrador TaskFlow',
-            'email' => 'admin@taskflow.test',
+            'name' => 'Administrador Rafael',
+            'email' => 'rafael@example.com',
         ]);
 
         User::factory()->count(10)->create();
