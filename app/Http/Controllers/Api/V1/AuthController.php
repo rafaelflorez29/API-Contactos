@@ -29,7 +29,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken($request->validated('device_name'))->plainTextToken;
+        $token = $user->createToken($request->validated('email'))->plainTextToken;
 
         return response()->json([
             'token' => $token,
@@ -49,6 +49,4 @@ class AuthController extends Controller
 
         return response()->noContent();
     }
-
-
 }

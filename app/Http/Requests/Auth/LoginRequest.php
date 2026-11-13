@@ -25,8 +25,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email'],
-            'device_name' => ['required', 'string', 'max:100'],
-            'password' => ['required', 'String'],
+            'password' => ['required', 'string'],
         ];
     }
 
@@ -36,9 +35,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'El correo es obligatorio.',
             'email.email' => 'El correo debe usar un formato valido',
-            'password.required' => 'El correo es un campo obligatorio',
-            'device_name.required' => 'El nombre del dispositivo es obligatorio.',
-            'device_name.max' => 'El nombre del dispositivo admite máximo 100 caracteres.',
+            'password.required' => 'La contraseña es un campo obligatorio',
         ];
     }
 }
