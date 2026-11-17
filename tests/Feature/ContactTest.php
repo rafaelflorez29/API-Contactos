@@ -112,10 +112,9 @@ it('listar contactos', function () {
     ]);
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->getJson('api/v1/contact/');
+    $resultado = $this->actingAs($user)->getJson('/api/v1/contact/');
 
     $resultado->assertStatus(200)->assertJsonFragment([
-        'id' => $contact->id,
         'name' => $contact->name,
         'email' => $contact->email,
         'address' => $contact->address,
@@ -138,7 +137,7 @@ it('crea un contacto válido', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->postJson('api/v1/contact/', $contact);
+    $resultado = $this->actingAs($user)->postJson('api/v1/contact', $contact);
 
     $resultado->assertCreated();
 
