@@ -69,7 +69,7 @@ it('mostrar usuarios', function () {
     $user = User::factory()->create();
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->getJson('api/v1/users');
+    $resultado = $this->actingAs($user)->getJson('api/v1/user/'.$user->id);
 
     $resultado->assertStatus(200)->assertJsonStructure([
         'user' => [
@@ -92,7 +92,7 @@ it('crear usuario', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->postJson('/api/v1/created-user', $datos);
+    $resultado = $this->actingAs($user)->postJson('/api/v1/user/created', $datos);
 
     $resultado->assertStatus(201)->assertJson([
         'message' => 'Usuario creado con exito',
@@ -103,7 +103,7 @@ it('rechaza usuarios con contraseñas de menos de ocho caracteres', function () 
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
-    $this->actingAs($user)->postJson('/api/v1/created-user', [
+    $this->actingAs($user)->postJson('/api/v1/user/created', [
         'name' => 'Usuario de prueba',
         'email' => 'prueba@example.test',
         'password' => '1234567',

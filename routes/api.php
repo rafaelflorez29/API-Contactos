@@ -12,12 +12,22 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
         Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
-        Route::post('/contact', [ContactController::class, 'store']);
-        Route::put('/contact/{contact}', [ContactController::class, 'update']);
-        Route::delete('/contact/{contact}', [ContactController::class, 'destroy']);
-        Route::get('/users', [UserController::class, 'index'])->name('user');
-        Route::get("/contacts", [ContactController::class, 'index']);
-        Route::get("/contact/{contact}", [ContactController::class, 'show']);
-        Route::post("/created-user", [UserController::class, 'store']);
+
+        Route::prefix('user')->group(function () {
+            Route::get('/{user}', [UserController::class, 'show']);
+            Route::delete('/{user}', [UserController::class, 'destroy']);
+            Route::post("/created", [UserController::class, 'store']);
+            Route::get('/', [UserController::class, 'index'])->name('user');
+        });
+
+        Route::prefix('contact')->group(function () {
+            Route::get('/', [ContactController::class, 'index'])->name('contact');
+            Route::post('/', [ContactController::class, 'store']);
+            Route::get('/{contact}', [ContactController::class, 'show']);
+            Route::put('/{contact}', [ContactController::class, 'update']);
+            Route::delete('/{contact}', [ContactController::class, 'destroy']);
+        });
+
     });
+
 });

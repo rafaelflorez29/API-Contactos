@@ -41,7 +41,7 @@ it('rechaza un número de teléfono ya asignado a otro contacto', function () {
 
     Sanctum::actingAs($user);
 
-    $this->postJson('/api/v1/contact', [
+    $this->postJson('/api/v1/contact/', [
         'name' => 'Nuevo contacto',
         'email' => 'nuevo@example.test',
         'number_phone' => '3000000000',
@@ -112,7 +112,7 @@ it('listar contactos', function () {
     ]);
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->getJson('api/v1/contacts');
+    $resultado = $this->actingAs($user)->getJson('api/v1/contact/');
 
     $resultado->assertStatus(200)->assertJsonFragment([
         'id' => $contact->id,
@@ -138,7 +138,7 @@ it('crea un contacto válido', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->postJson('api/v1/contact', $contact);
+    $resultado = $this->actingAs($user)->postJson('api/v1/contact/', $contact);
 
     $resultado->assertCreated();
 
