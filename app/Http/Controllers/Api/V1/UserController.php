@@ -27,9 +27,9 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function show($id): JsonResponse
+    public function show(Request $request, $id): JsonResponse
     {
-        $user = User::findOrFail($id);
+        $user = $request->user()->findOrFail($id);
 
         return response()->json([
             'user' => [$user],

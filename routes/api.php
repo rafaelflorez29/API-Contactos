@@ -14,10 +14,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
         Route::prefix('user')->group(function () {
+            Route::get('/1', [UserController::class, 'index'])->name('user');
             Route::get('/{user}', [UserController::class, 'show']);
             Route::delete('/{user}', [UserController::class, 'destroy']);
             Route::post("/created", [UserController::class, 'store']);
-            Route::get('/', [UserController::class, 'index'])->name('user');
         });
 
         Route::prefix('contact')->group(function () {
