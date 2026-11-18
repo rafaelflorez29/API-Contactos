@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Http\Requests\Auth\StoreUserRequest;
+use App\Http\Requests\Auth\UpdateUserRequest;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return response()->json([
             'user' => User::all(),
         ]);
@@ -23,7 +25,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            "message" => "Usuario creado con exito"
+            'message' => 'Usuario creado con exito',
         ], 201);
     }
 
@@ -33,6 +35,16 @@ class UserController extends Controller
 
         return response()->json([
             'user' => [$user],
+        ], 200);
+    }
+
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
+    {
+        $user->update($request->validated());
+
+        return response()->json([
+            'message' => 'Usuario actualizado exitosamente.',
+            'data' => $user,
         ], 200);
     }
 }
