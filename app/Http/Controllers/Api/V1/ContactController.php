@@ -43,9 +43,9 @@ class ContactController extends Controller
         return response()->noContent();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = auth()->user()->contacts()->get();
+        $contacts = $request->user()->contacts()->get();
 
         return response()->json([
             'contact' => ContactResource::collection($contacts),
