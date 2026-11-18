@@ -41,7 +41,7 @@ it('rechaza un número de teléfono ya asignado a otro contacto', function () {
 
     Sanctum::actingAs($user);
 
-    $this->postJson('/api/v1/contact/', [
+    $this->postJson('/api/v1/contact/created', [
         'name' => 'Nuevo contacto',
         'email' => 'nuevo@example.test',
         'number_phone' => '3000000000',
@@ -73,7 +73,7 @@ it('un contacto puede ser editado', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->putJson("api/v1/contact/{$contact->id}", $actualizar);
+    $resultado = $this->actingAs($user)->putJson("/api/v1/contact/{$contact->id}", $actualizar);
 
     $resultado->assertStatus(200)
         ->assertJson([
@@ -99,7 +99,7 @@ it('un contacto puede ser eliminado por un usuario', function () {
     ]);
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->deleteJson("api/v1/contact/{$contact->id}");
+    $resultado = $this->actingAs($user)->deleteJson("/api/v1/contact/{$contact->id}");
 
     $resultado->assertStatus(204);
 });
@@ -137,7 +137,7 @@ it('crea un contacto válido', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->postJson('api/v1/contact', $contact);
+    $resultado = $this->actingAs($user)->postJson('api/v1/contact/created', $contact);
 
     $resultado->assertCreated();
 

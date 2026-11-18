@@ -34,7 +34,7 @@ it('un usuario puede editar un contacto', function () {
 
     Sanctum::actingAs($user);
     $resultado = $this->actingAs($user)
-        ->putJson("api/v1/contact/{$contact->id}", $actualizar);
+        ->putJson("/api/v1/contact/{$contact->id}", $actualizar);
 
     $resultado->assertStatus(200)
         ->assertJson([
@@ -60,7 +60,7 @@ it('un usuario puede eliminar contactos', function () {
     ]);
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->deleteJson("api/v1/contact/{$contact->id}");
+    $resultado = $this->actingAs($user)->deleteJson("/api/v1/contact/{$contact->id}");
 
     $resultado->assertStatus(204);
 });
@@ -69,7 +69,7 @@ it('mostrar usuarios', function () {
     $user = User::factory()->create();
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->getJson('api/v1/user/'.$user->id);
+    $resultado = $this->actingAs($user)->getJson('/api/v1/user/'.$user->id);
 
     $resultado->assertStatus(200)->assertJsonStructure([
         'user' => [

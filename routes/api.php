@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('contact')->group(function () {
             Route::get('/', [ContactController::class, 'index'])->name('contact');
-            Route::post('/', [ContactController::class, 'store']);
+            Route::post('/created', [ContactController::class, 'store']);
             Route::get('/{contact}', [ContactController::class, 'show']);
             Route::put('/{contact}', [ContactController::class, 'update']);
             Route::delete('/{contact}', [ContactController::class, 'destroy']);
