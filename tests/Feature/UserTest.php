@@ -113,3 +113,24 @@ it('rechaza usuarios con contraseñas de menos de ocho caracteres', function () 
 
     $this->assertDatabaseMissing('users', ['email' => 'prueba@example.test']);
 });
+
+it('un usuario puede ser editado', function () {
+    $user = User::factory()->create([
+        'name' => 'rafa',
+        'email' => 'rafael@gmail.com',
+        'password' => 'rafaelflorez',
+    ]);
+
+    $actualizar = [
+        'name' => 'rafa',
+        'email' => 'rafael1@gmail.com',
+        'password' => 'rafaelfg',
+    ];
+
+    Sanctum::actingAs($user);
+    $resultado = $this->actingAs($user)->putJson("/api/v1/user/{$user->id}", $actualizar);
+
+    $resultado->assertStatus(200)->assertJson([
+        'message' => 'Usuario actualizado exitosamente.',
+    ]);
+});
