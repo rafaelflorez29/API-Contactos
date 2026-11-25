@@ -57,6 +57,7 @@ it('un contacto puede ser editado', function () {
     $user = User::factory()->create();
 
     $contact = Contact::factory()->create([
+        'user_id' => $user->id,
         'name' => 'rafa',
         'email' => 'rafa@gmail.com',
         'number_phone' => '3000000000',
@@ -65,6 +66,7 @@ it('un contacto puede ser editado', function () {
     ]);
 
     $actualizar = [
+        'user_id' => $user->id,
         'name' => 'Rafael',
         'email' => 'rafa@gmail.com',
         'number_phone' => '3000000001',
@@ -73,7 +75,7 @@ it('un contacto puede ser editado', function () {
     ];
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->putJson("/api/v1/contact/{$contact->id}", $actualizar);
+    $resultado = $this->actingAs($user)->putJson("/api/v1/contact/update/{$contact->id}", $actualizar);
 
     $resultado->assertStatus(200)
         ->assertJson([
@@ -91,6 +93,7 @@ it('un contacto puede ser eliminado por un usuario', function () {
     $user = User::factory()->create();
 
     $contact = Contact::factory()->create([
+        'user_id' => $user->id,
         'name' => 'Rafael',
         'email' => 'rafa@gmail.com',
         'number_phone' => '3000000001',
@@ -99,7 +102,7 @@ it('un contacto puede ser eliminado por un usuario', function () {
     ]);
 
     Sanctum::actingAs($user);
-    $resultado = $this->actingAs($user)->deleteJson("/api/v1/contact/{$contact->id}");
+    $resultado = $this->actingAs($user)->deleteJson("/api/v1/contact/destroy/{$contact->id}");
 
     $resultado->assertStatus(204);
 });

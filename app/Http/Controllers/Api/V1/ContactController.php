@@ -26,8 +26,14 @@ class ContactController extends Controller
         ], 201);
     }
 
-    public function update(UpdateContactRequest $request, Contact $contact): JsonResponse
+    public function update(UpdateContactRequest $request, Contact $contact) : JsonResponse
     {
+        if ($contact->user_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'El contacto solicitado no existe o no tienes permiso para verlo.'
+            ], 404);
+        }
+
         $contact->update($request->validated());
 
         return response()->json([
@@ -36,8 +42,14 @@ class ContactController extends Controller
         ], 200);
     }
 
-    public function destroy(Contact $contact): Response
+    public function destroy(Request $request, Contact $contact)
     {
+        if ($contact->user_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'El contacto solicitado no existe o no tienes permiso para eliminarlo.'
+            ], 404);
+        }
+
         $contact->delete();
 
         return response()->noContent();
@@ -54,8 +66,18 @@ class ContactController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contact = $request->user()->contacts()->findOrFail($id);
+        $contact = $request->user()->contacts()->find($id);
 
-        return response()->json($contact);
+        if (!$contact) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Este contacto no existe o no te pertenece.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $contact
+        ], 200);
     }
 }
