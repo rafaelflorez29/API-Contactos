@@ -16,17 +16,17 @@ Route::prefix('v1')->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/1', [UserController::class, 'index'])->name('user');
             Route::get('/{user}', [UserController::class, 'show']);
-            Route::delete('/{user}', [UserController::class, 'destroy']);
+            Route::delete('/destroy/{user}', [UserController::class, 'destroy']);
             Route::post('/created', [UserController::class, 'store']);
-            Route::put('/{user}', [UserController::class, 'update']);
+            Route::put('/update/{user}', [UserController::class, 'update']);
         });
 
         Route::prefix('contact')->group(function () {
             Route::get('/', [ContactController::class, 'index'])->name('contact');
             Route::post('/created', [ContactController::class, 'store']);
             Route::get('/{contact}', [ContactController::class, 'show']);
-            Route::put('/{contact}', [ContactController::class, 'update']);
-            Route::delete('/{contact}', [ContactController::class, 'destroy']);
+            Route::put('/update/{contact}', [ContactController::class, 'update']);
+            Route::delete('/destroy/{contact}', [ContactController::class, 'destroy']);
         });
 
     });
